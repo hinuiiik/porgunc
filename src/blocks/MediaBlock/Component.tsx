@@ -6,7 +6,7 @@ import RichText from '@/components/RichText'
 
 import type { MediaBlock as MediaBlockProps } from '@/payload-types'
 
-import { Media } from '../../components/Media'
+import { Media } from '@/components/Media'
 
 type Props = MediaBlockProps & {
   breakout?: boolean
@@ -29,39 +29,62 @@ export const MediaBlock: React.FC<Props> = (props) => {
     disableInnerContainer,
   } = props
 
-  let caption
-  if (media && typeof media === 'object') caption = media.caption
+  let caption: any
+  let mediaUrl: string | undefined
+  let mimeType: string | undefined
+
+  if (media && typeof media === 'object') {
+    caption = media.caption
+    // Assumes your Payload media object has `url` and `mimeType`
+    mediaUrl = (media as any)?.url
+    mimeType = (media as any)?.mimeType
+  }
+
+  const isPDF = mimeType === 'application/pdf' || (mediaUrl?.toLowerCase()?.endsWith('.pdf'))
 
   return (
     <div
-      className={cn(
-        '',
-        {
-          container: enableGutter,
-        },
-        className,
-      )}
+    className={cn(
+      '',
+      {
+        container: enableGutter,
+      },
+      className,
+    )}
     >
-      {(media || staticImage) && (
+    {(media || staticImage) && (
+      <>
+      {isPDF && mediaUrl ? (
+        <div className="w-full border border-border rounded-[0.8rem] overflow-hidden">
+        <embed
+        src={mediaUrl}
+        type="application/pdf"
+        className="w-full h-[80vh]"
+        />
+        </div>
+      ) : (
         <Media
-          imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
-          resource={media}
-          src={staticImage}
+        imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+        resource={media}
+        src={staticImage}
         />
       )}
-      {caption && (
-        <div
-          className={cn(
-            'mt-6',
-            {
-              container: !disableInnerContainer,
-            },
-            captionClassName,
-          )}
-        >
-          <RichText data={caption} enableGutter={false} />
-        </div>
+      </>
+    )}
+
+    {caption && (
+      <div
+      className={cn(
+        'mt-6',
+        {
+          container: !disableInnerContainer,
+        },
+        captionClassName,
       )}
+      >
+      <RichText data={caption} enableGutter={false} />
+      </div>
+    )}
     </div>
   )
 }
