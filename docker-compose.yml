@@ -6,8 +6,8 @@ services:
       - '3000:3000'
     volumes:
 #      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-      - public:/home/node/app/public
+      - node_modules:/app/node_modules
+      - public:/app/public
 #    working_dir: /home/node/app/
 #    command: sh -c "yarn install && yarn dev"
 #    command: sleep 10000s
