@@ -30,7 +30,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="relative z-20 bg-[#4B9CD3] dark:bg-[#0B172A]">
+    <header className="relative z-20 bg-[hsl(var(--header))] dark:bg-[hsl(var(--header))]">
       <div className="container py-8 flex justify-between">
         <Link href="/">
           <Logo loading="eager" priority="high" className="" />
