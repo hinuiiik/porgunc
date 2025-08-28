@@ -8,8 +8,8 @@ services:
 #      - .:/home/node/app
       - node_modules:/home/node/app/node_modules
       - public:/home/node/app/public
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
+#    working_dir: /home/node/app/
+#    command: sh -c "yarn install && yarn dev"
 #    command: sleep 10000s
 #    depends_on:
 #      - postgresql
