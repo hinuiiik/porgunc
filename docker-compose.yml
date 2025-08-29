@@ -9,8 +9,8 @@ services:
         NEXT_PUBLIC_SERVER_URL: ${SERVICE_URL_PAYLOAD}
         CRON_SECRET: ${CRON_SECRET}
         PREVIEW_SECRET: ${PREVIEW_SECRET}
-    ports:
-      - '3000:3000'
+#    ports:
+#      - '3000:3000'
     volumes:
 #      - .:/home/node/app
       - node_modules:/app/node_modules

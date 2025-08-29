@@ -31,9 +31,9 @@ ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 ENV CRON_SECRET=${CRON_SECRET}
 ENV PREVIEW_SECRET=${PREVIEW_SECRET}
 
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
