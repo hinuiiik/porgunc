@@ -5,7 +5,6 @@ services:
       context: .
       args:
         DATABASE_URI: ${DATABASE_URI}
-        SERVICE_URL_PAYLOAD: ${SERVICE_URL_PAYLOAD}
         PAYLOAD_SECRET: ${PAYLOAD_SECRET}
         NEXT_PUBLIC_SERVER_URL: ${SERVICE_URL_PAYLOAD}
         CRON_SECRET: ${CRON_SECRET}
