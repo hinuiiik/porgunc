@@ -30,12 +30,10 @@ ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 ENV CRON_SECRET=${CRON_SECRET}
 ENV PREVIEW_SECRET=${PREVIEW_SECRET}
-RUN echo "Printing env: ${PAYLOAD_SECRET}"
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN echo "Printing env: ${PAYLOAD_SECRET}"
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
@@ -57,7 +55,6 @@ ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 ENV CRON_SECRET=${CRON_SECRET}
 ENV PREVIEW_SECRET=${PREVIEW_SECRET}
 
-RUN echo "Printing env: ${PAYLOAD_SECRET}"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
