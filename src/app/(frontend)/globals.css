@@ -53,7 +53,7 @@
     --error: 0 75% 55%;
   }
 
-  [data-theme='dark'] {
+  [data-theme='dark'],.dark {
     /* UNC Dark Mode Theme */
     --background: 220 25% 10%; /* deep navy */
     --foreground: 0 0% 100%;

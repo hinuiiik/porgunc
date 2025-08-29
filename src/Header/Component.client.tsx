@@ -8,6 +8,8 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
+import { Navbar02 } from '@/components/ui/shadcn-io/navbar-02'
+import { Navbar08 } from '@/components/ui/shadcn-io/navbar-08'
 
 interface HeaderClientProps {
   data: Header
@@ -30,13 +32,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="relative z-20 bg-[hsl(var(--header))] dark:bg-[hsl(var(--header))]">
-      <div className="container py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="" />
-        </Link>
-        <HeaderNav data={data} />
-      </div>
-    </header>
+    <div className="relative w-full">
+      <Navbar08 />
+    </div>
   )
 }
