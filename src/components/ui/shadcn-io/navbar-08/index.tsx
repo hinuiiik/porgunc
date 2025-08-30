@@ -29,6 +29,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { ComponentProps } from 'react';
 import Link from 'next/link'
+import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -344,12 +345,22 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                   onClick={(e) => e.preventDefault()}
                   className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
                 >
-                  <div className="text-2xl">
+                  <div className="flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0">
                     <Link href={logoHref}>
                       {logo}
                     </Link>
                   </div>
-                  <span className="hidden font-bold text-xl sm:inline-block">PorgUNC</span>
+                  <span className="hidden font-bold text-xl sm:inline-block
+                    transition-all duration-500
+                    hover:bg-[linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#24408e,#732982,#e40303)]
+                    hover:bg-[length:200%_200%]
+                    hover:bg-clip-text hover:text-transparent
+                    hover:animate-gradient-x"
+                  >
+                    <Link href={logoHref} className="block">
+                      PorgUNC
+                    </Link>
+                  </span>
                 </button>
               </div>
             </div>
@@ -388,6 +399,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
               {/*  userAvatar={userAvatar}*/}
               {/*  onItemClick={onUserItemClick}*/}
               {/*/>*/}
+              <ThemeSelector />
             </div>
           </div>
           {/* Bottom navigation */}

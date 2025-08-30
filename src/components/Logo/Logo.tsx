@@ -17,8 +17,8 @@ export const Logo = (props: Props) => {
     /* eslint-disable @next/next/no-img-element */
     <img
       alt="PorgUNC Logo"
-      width={30}
-      height={30}
+      width={50}
+      height={50}
       loading={loading}
       fetchPriority={priority}
       decoding="async"
