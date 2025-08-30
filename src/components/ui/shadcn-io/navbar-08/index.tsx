@@ -311,7 +311,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     <NavigationMenu className="max-w-none">
                       <NavigationMenuList className="flex-col items-start gap-0">
                         {navigationLinks.map((link, index) => (
-                          <NavigationMenuItem key={index} className="w-full mb-1">
+                          <NavigationMenuItem key={index} className="w-full mb-0.5">
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
