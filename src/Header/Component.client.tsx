@@ -35,7 +35,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       // @ts-ignore
       href: item.link.url ?? "/"+item.link?.reference?.value?.slug,
       label: item.link.label ?? "TELL VIKRAM TO FUCKING FIX ME",
-      active: true, // Possible Todo: actually make this functional
+      active: false, // Possible Todo: actually make this functional
     })) ?? [];
 
   return (
