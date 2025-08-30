@@ -307,7 +307,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                       <HamburgerIcon />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="start" className="w-64 p-1">
+                  <PopoverContent align="start" className="w-50 p-1">
                     <NavigationMenu className="max-w-none">
                       <NavigationMenuList className="flex-col items-start gap-0">
                         {navigationLinks.map((link, index) => (
