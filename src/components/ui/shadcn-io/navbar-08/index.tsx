@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { ComponentProps } from 'react';
+import Link from 'next/link'
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -338,7 +339,9 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                   className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
                 >
                   <div className="text-2xl">
-                    {logo}
+                    <Link href={logoHref}>
+                      {logo}
+                    </Link>
                   </div>
                   <span className="hidden font-bold text-xl sm:inline-block">PorgUNC</span>
                 </button>
@@ -368,17 +371,17 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
             {/* Right side */}
             <div className="flex flex-1 items-center justify-end gap-2">
               {/* Notification */}
-              <NotificationMenu
-                notificationCount={notificationCount}
-                onItemClick={onNotificationItemClick}
-              />
-              {/* User menu */}
-              <UserMenu
-                userName={userName}
-                userEmail={userEmail}
-                userAvatar={userAvatar}
-                onItemClick={onUserItemClick}
-              />
+              {/*<NotificationMenu*/}
+              {/*  notificationCount={notificationCount}*/}
+              {/*  onItemClick={onNotificationItemClick}*/}
+              {/*/>*/}
+              {/*/!* User menu *!/*/}
+              {/*<UserMenu*/}
+              {/*  userName={userName}*/}
+              {/*  userEmail={userEmail}*/}
+              {/*  userAvatar={userAvatar}*/}
+              {/*  onItemClick={onUserItemClick}*/}
+              {/*/>*/}
             </div>
           </div>
           {/* Bottom navigation */}
