@@ -282,6 +282,8 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
       }
     };
 
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     return (
       <header
         ref={combinedRef}
@@ -298,7 +300,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
             <div className="flex flex-1 items-center gap-2">
               {/* Mobile menu trigger */}
               {isMobile && (
-                <Popover>
+                <Popover open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       className="group h-8 w-8 hover:bg-accent hover:text-accent-foreground"
@@ -308,7 +310,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                       <HamburgerIcon />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="start" className="w-50 p-1">
+                  <PopoverContent align="start" className="w-45 p-1">
                     <NavigationMenu className="max-w-none">
                       <NavigationMenuList className="flex-col items-start gap-0">
                         {navigationLinks.map((link, index) => (
@@ -316,7 +318,10 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
-                                if (onNavItemClick && link.href) onNavItemClick(link.href);
+                                if (onNavItemClick && link.href) {
+                                  onNavItemClick(link.href);
+                                }
+                                setMobileMenuOpen(false); // ✅ Close menu
                               }}
                               className={cn(
                                 'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline',
@@ -331,6 +336,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     </NavigationMenu>
                   </PopoverContent>
                 </Popover>
+
               )}
               {/* Logo */}
               <div className="flex items-center">
@@ -420,4 +426,4 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
 
 Navbar08.displayName = 'Navbar08';
 
-export { Logo, HamburgerIcon, NotificationMenu, UserMenu };
+// export { Logo, HamburgerIcon, NotificationMenu, UserMenu };
