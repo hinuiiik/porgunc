@@ -35,17 +35,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   const userNavigationLinks: Navbar08NavItem[] =
     data.navItems?.map((item, index) => ({
-      href: item.link.url ?? "#",
-      label: item.link.label ?? "",
+      // @ts-ignore
+      href: item.link.url ?? "/"+item.link?.reference?.value?.slug,
+      label: item.link.label ?? "TELL VIKRAM TO FUCKING FIX ME",
       active: true, // Possible Todo: actually make this functional
     })) ?? [];
-  console.log(userNavigationLinks);
-  console.log(data);
-  console.log(data.navItems?.at(0)?.link);
-  for (const key in data.navItems) {
-    console.log(data.navItems.at(parseInt(key)));
-    console.log(data.navItems.at(parseInt(key))?.link?.reference?.value);
-  }
+
   return (
     <div className="relative w-full">
       <Navbar08 navigationLinks={userNavigationLinks} />
