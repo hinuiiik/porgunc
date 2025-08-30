@@ -53,7 +53,7 @@
     --error: 0 75% 55%;
   }
 
-  [data-theme='dark'] {
+  [data-theme='dark'],.dark {
     /* UNC Dark Mode Theme */
     --background: 220 25% 10%; /* deep navy */
     --foreground: 0 0% 100%;
@@ -109,3 +109,30 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+@keyframes gradient-x {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; }
+}
+.animate-gradient-x {
+  animation: gradient-x 4s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-rainbow {
+  animation: rainbow 4s linear infinite;
+}
+
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.hover\:animate-gradient-x:hover {
+  animation: gradient-x 3s linear infinite;
+}
+
+
