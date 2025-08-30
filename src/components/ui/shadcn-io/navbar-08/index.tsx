@@ -311,7 +311,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     <NavigationMenu className="max-w-none">
                       <NavigationMenuList className="flex-col items-start gap-0">
                         {navigationLinks.map((link, index) => (
-                          <NavigationMenuItem key={index} className="w-full">
+                          <NavigationMenuItem key={index} className="w-full mb-1">
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
@@ -340,7 +340,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                   <div className="text-2xl">
                     {logo}
                   </div>
-                  <span className="hidden font-bold text-xl sm:inline-block">shadcn.io</span>
+                  <span className="hidden font-bold text-xl sm:inline-block">PorgUNC</span>
                 </button>
               </div>
             </div>
@@ -391,10 +391,10 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                     <NavigationMenuItem key={index}>
                       <NavigationMenuLink
                         href={link.href}
-                        // onClick={(e) => {
-                        //   e.preventDefault();
-                        //   if (onNavItemClick && link.href) onNavItemClick(link.href);
-                        // }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (onNavItemClick && link.href) onNavItemClick(link.href);
+                        }}
                         className={cn(
                           'text-muted-foreground hover:text-primary py-1.5 font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50',
                           link.active && 'text-primary'

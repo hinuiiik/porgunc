@@ -7,6 +7,7 @@ import type { Header } from '@/payload-types'
 
 import { Navbar08, Navbar08NavItem } from '@/components/ui/shadcn-io/navbar-08'
 import { useRouter } from 'next/navigation'
+import { Logo } from '@/components/Logo/Logo'
 
 interface HeaderClientProps {
   data: Header
@@ -39,7 +40,13 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <div className="relative w-full">
-      <Navbar08 navigationLinks={userNavigationLinks} logoHref={"/home"} onSearchSubmit={(query) => router.push(`/search?q=${encodeURIComponent(query)}`)} />
+      <Navbar08
+        navigationLinks={userNavigationLinks}
+        logoHref={'/home'}
+        onSearchSubmit={(query) => router.push(`/search?q=${encodeURIComponent(query)}`)}
+        onNavItemClick={(href) => router.push(`${href}`)}
+        logo={<Logo />}
+      />
     </div>
   )
 }
