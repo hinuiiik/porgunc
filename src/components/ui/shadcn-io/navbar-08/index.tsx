@@ -213,7 +213,7 @@ export interface Navbar08Props extends React.HTMLAttributes<HTMLElement> {
 
 // Default navigation links
 const defaultNavigationLinks: Navbar08NavItem[] = [
-  { href: '#', label: 'Home', active: true },
+  { href: '#', label: 'Home', active: false },
   { href: '#', label: 'Features' },
   { href: '#', label: 'Pricing' },
   { href: '#', label: 'About' },
@@ -317,6 +317,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                         {navigationLinks.map((link, index) => (
                           <NavigationMenuItem key={index} className="w-full mb-0.5">
                             <button
+                              tabIndex={-1} // stops the first item from being always highlighted
                               onClick={(e) => {
                                 e.preventDefault();
                                 if (onNavItemClick && link.href) {

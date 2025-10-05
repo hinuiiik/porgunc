@@ -31,12 +31,19 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   const userNavigationLinks: Navbar08NavItem[] =
-    data.navItems?.map((item, index) => ({
+    data.navItems?.map((item) => {
       // @ts-ignore
-      href: item.link.url ?? "/"+item.link?.reference?.value?.slug,
-      label: item.link.label ?? "TELL VIKRAM TO FUCKING FIX ME",
-      active: false, // Possible Todo: actually make this functional
-    })) ?? [];
+      const href = item.link.url ?? "/"+item.link?.reference?.value?.slug
+      return {
+        href,
+        label: item.link.label ?? 'TELL VIKRAM TO FIX ME',
+        active: pathname === href,
+
+      }
+
+    }
+    ) ?? []
+
 
   return (
     <div className="relative w-full">
