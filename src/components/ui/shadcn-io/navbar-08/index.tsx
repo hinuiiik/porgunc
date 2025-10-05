@@ -405,10 +405,10 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
           </div>
           {/* Bottom navigation */}
           {!isMobile && (
-            <div className="border-t py-2">
-              {/* Navigation menu */}
+            <div className=" py-2 flex justify-center">
+              {/* Center navigation menu */}
               <NavigationMenu>
-                <NavigationMenuList className="gap-2">
+                <NavigationMenuList className="gap-2 justify-center">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index}>
                       <NavigationMenuLink
@@ -418,7 +418,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
                           if (onNavItemClick && link.href) onNavItemClick(link.href);
                         }}
                         className={cn(
-                          ' hover:text-primary py-1.5 font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50',
+                          'hover:text-primary py-1.5 font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50',
                           link.active && 'text-primary'
                         )}
                         data-active={link.active}
@@ -431,6 +431,7 @@ export const Navbar08 = React.forwardRef<HTMLElement, Navbar08Props>(
               </NavigationMenu>
             </div>
           )}
+
         </div>
       </header>
     );
