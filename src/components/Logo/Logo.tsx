@@ -16,14 +16,14 @@ export const Logo = (props: Props) => {
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
-      alt="Payload Logo"
-      width={60}
-      height={60}
+      alt="PorgUNC Logo"
+      width={50}
+      height={50}
       loading={loading}
       fetchPriority={priority}
       decoding="async"
       // className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      className={clsx('max-w-[9.375rem] w-full h-[60px]', className)}
+      className={clsx('', className)} // max-w-[9.375rem] w-full h-[60px]
       // src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-logo-light.svg"
       src={"/porgplaceholder.svg"}
     />
