@@ -16,7 +16,7 @@ interface PaginationProps {
   className?: string
   page: number
   totalPages: number
-  basePath?: string // optional base path
+  basePath?: string
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -35,7 +35,6 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const pageNumbers: (number | 'ellipsis')[] = []
 
-  // Show previous page if exists
   if (page > 2) pageNumbers.push(1)
   if (page > 3) pageNumbers.push('ellipsis')
   if (page - 1 >= 1) pageNumbers.push(page - 1)

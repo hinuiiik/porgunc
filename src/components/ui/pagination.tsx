@@ -7,7 +7,6 @@ import type { ButtonProps } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-/* ----- Pagination wrappers ----- */
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav aria-label="pagination" className={cn('mx-auto flex w-full justify-center', className)} {...props} />
 )
@@ -24,7 +23,6 @@ const PaginationItem: React.FC<{ ref?: React.Ref<HTMLLIElement> } & React.HTMLAt
                                                                                                               ...props
                                                                                                             }) => <li className={cn('', className)} ref={ref} {...props} />
 
-/* ----- Button / Link ----- */
 type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<ButtonProps, 'size'> &
@@ -44,7 +42,6 @@ const PaginationLink = ({ className, isActive, size = 'icon', ...props }: Pagina
   />
 )
 
-/* ----- First / Previous / Next / Last ----- */
 const PaginationFirst = (props: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink aria-label="Go to first page" size="default" {...props}>
     <ChevronLeft className="h-4 w-4 rotate-180" />
@@ -73,7 +70,6 @@ const PaginationLast = (props: React.ComponentProps<typeof PaginationLink>) => (
   </PaginationLink>
 )
 
-/* ----- Ellipsis ----- */
 const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
   <span aria-hidden className={cn('flex h-9 w-9 items-center justify-center', className)} {...props}>
     <MoreHorizontal className="h-4 w-4" />
@@ -81,7 +77,6 @@ const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'
   </span>
 )
 
-/* ----- Main Pagination Logic Component ----- */
 export const PaginationUI: React.FC<{
   page: number
   totalPages: number
@@ -147,7 +142,7 @@ export const PaginationUI: React.FC<{
   )
 }
 
-/* ----- Exports ----- */
+
 export {
   Pagination,
   PaginationContent,

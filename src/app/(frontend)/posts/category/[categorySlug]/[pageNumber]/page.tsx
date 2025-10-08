@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation'
 export const revalidate = 600
 
 // Define posts per page
-const POSTS_PER_PAGE = 1
+const POSTS_PER_PAGE = 6
 
 type Args = {
   params: Promise<{
