@@ -34,7 +34,15 @@ ENV PREVIEW_SECRET=${PREVIEW_SECRET}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# ✅ Run Payload migrations before building Next.js
+RUN \
+  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate; \
+  elif [ -f yarn.lock ]; then yarn payload migrate; \
+  elif [ -f package-lock.json ]; then npx payload migrate; \
+  else echo "No lockfile found for migration." && exit 1; \
+  fi
 
+# 🏗️ Build Next.js after migrations
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -54,7 +62,6 @@ ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 ENV CRON_SECRET=${CRON_SECRET}
 ENV PREVIEW_SECRET=${PREVIEW_SECRET}
-
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
