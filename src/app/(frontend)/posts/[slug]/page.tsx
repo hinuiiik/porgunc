@@ -49,6 +49,12 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  // Extract PDF URL safely
+  const pdfUrl =
+    post.pdf && typeof post.pdf === 'object' && 'url' in post.pdf
+      ? (post.pdf.url as string)
+      : undefined
+
   return (
     <article className="pb-16 pt-8">
       <PageClient />
@@ -63,6 +69,19 @@ export default async function Post({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4">
         <div className="container">
           <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
+
+          {/* Render PDF below content */}
+          {pdfUrl && (
+            <div className="max-w-[52rem] mx-auto mt-12 border border-border rounded-[0.8rem] overflow-hidden">
+              <iframe
+                src={pdfUrl}
+                className="w-full aspect-[8.5/11]"
+                title="PDF Viewer"
+                allowFullScreen
+              />
+            </div>
+          )}
+
           {post.relatedPosts && post.relatedPosts.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"

@@ -29,62 +29,39 @@ export const MediaBlock: React.FC<Props> = (props) => {
     disableInnerContainer,
   } = props
 
-  let caption: any
-  let mediaUrl: string | undefined
-  let mimeType: string | undefined
-
-  if (media && typeof media === 'object') {
-    caption = media.caption
-    // Assumes your Payload media object has `url` and `mimeType`
-    mediaUrl = (media as any)?.url
-    mimeType = (media as any)?.mimeType
-  }
-
-  const isPDF = mimeType === 'application/pdf' || (mediaUrl?.toLowerCase()?.endsWith('.pdf'))
+  let caption
+  if (media && typeof media === 'object') caption = media.caption
 
   return (
     <div
-    className={cn(
-      '',
-      {
-        container: enableGutter,
-      },
-      className,
-    )}
-    >
-    {(media || staticImage) && (
-      <>
-      {isPDF && mediaUrl ? (
-        <div className="w-full border border-border rounded-[0.8rem] overflow-hidden">
-        <embed
-        src={mediaUrl}
-        type="application/pdf"
-        className="w-full h-[80vh]"
-        />
-        </div>
-      ) : (
-        <Media
-        imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
-        resource={media}
-        src={staticImage}
-        />
-      )}
-      </>
-    )}
-
-    {caption && (
-      <div
       className={cn(
-        'mt-6',
+        '',
         {
-          container: !disableInnerContainer,
+          container: enableGutter,
         },
-        captionClassName,
+        className,
       )}
-      >
-      <RichText data={caption} enableGutter={false} />
-      </div>
-    )}
+    >
+      {(media || staticImage) && (
+        <Media
+          imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+          resource={media}
+          src={staticImage}
+        />
+      )}
+      {caption && (
+        <div
+          className={cn(
+            'mt-6',
+            {
+              container: !disableInnerContainer,
+            },
+            captionClassName,
+          )}
+        >
+          <RichText data={caption} enableGutter={false} />
+        </div>
+      )}
     </div>
   )
 }

@@ -14,6 +14,7 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { PdfBlock } from '@/blocks/PdfBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -26,6 +27,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
+
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -101,6 +103,16 @@ export const Posts: CollectionConfig<'posts'> = {
               }),
               label: false,
               required: true,
+            },
+            {
+              name: 'pdf',
+              label: 'PDF File',
+              type: 'relationship',
+              relationTo: 'pdfs',
+              required: false,
+              admin: {
+                description: 'Optional PDF to attach to this post.',
+              },
             },
           ],
           label: 'Content',
