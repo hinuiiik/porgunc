@@ -49,7 +49,6 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
-  // Extract PDF URL safely
   const pdfUrl =
     post.pdf && typeof post.pdf === 'object' && 'url' in post.pdf
       ? (post.pdf.url as string)
@@ -59,7 +58,6 @@ export default async function Post({ params: paramsPromise }: Args) {
     <article className="pb-16 pt-8">
       <PageClient />
 
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
@@ -70,7 +68,6 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="container">
           <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
 
-          {/* Render PDF below content */}
           {pdfUrl && (
             <div className="max-w-[52rem] mx-auto mt-12 border border-border rounded-[0.8rem] overflow-hidden">
               <iframe
