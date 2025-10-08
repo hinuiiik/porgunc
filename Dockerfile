@@ -34,14 +34,13 @@ ENV PREVIEW_SECRET=${PREVIEW_SECRET}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# ✅ Run Payload migrations in PRODUCTION mode before building Next.js
 RUN \
   if [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && NODE_ENV=production pnpm exec payload migrate --yes; \
+    corepack enable pnpm && pnpm exec payload migrate --yes --env=production; \
   elif [ -f yarn.lock ]; then \
-    NODE_ENV=production npx cross-env payload migrate --yes; \
+    npx payload migrate --yes --env=production; \
   elif [ -f package-lock.json ]; then \
-    NODE_ENV=production npx cross-env payload migrate --yes; \
+    npx payload migrate --yes --env=production; \
   else \
     echo "No lockfile found for migration." && exit 1; \
   fi
