@@ -36,7 +36,7 @@ COPY . .
 
 # ✅ Run Payload migrations before building Next.js
 RUN \
-  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate; \
+  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate --yes; \
   elif [ -f yarn.lock ]; then yarn payload migrate; \
   elif [ -f package-lock.json ]; then npx payload migrate; \
   else echo "No lockfile found for migration." && exit 1; \
