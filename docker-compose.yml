@@ -12,7 +12,7 @@ services:
       - pdfs:/home/node/app/public/pdfs
 
     working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm payload migrate && pnpm build && pnpm start"
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm payload migrate && pnpm build && node .next/standalone/server.js"
     depends_on:
       #      - mongo
       - postgres
