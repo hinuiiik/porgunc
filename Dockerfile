@@ -35,18 +35,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN \
-  if [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm exec payload migrate --yes --env=production; \
-  elif [ -f yarn.lock ]; then \
-    npx payload migrate --yes --env=production; \
-  elif [ -f package-lock.json ]; then \
-    npx payload migrate --yes --env=production; \
-  else \
-    echo "No lockfile found for migration." && exit 1; \
-  fi
-
-# 🏗️ Build Next.js after migrations
-RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
