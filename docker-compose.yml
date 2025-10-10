@@ -12,14 +12,12 @@ services:
       - pdfs:/home/node/app/public/pdfs
 
     working_dir: /home/node/app/
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm payload migrate && pnpm build && node .next/standalone/server.js"
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm dev"
     depends_on:
       #      - mongo
       - postgres
     env_file:
       - .env
-    labels:
-      - 'traefik.http.services.public_web.loadbalancer.server.port=3000'
 
   #  # Ensure your DATABASE_URI uses 'mongo' as the hostname ie. mongodb://mongo/my-db-name
   #  mongo:

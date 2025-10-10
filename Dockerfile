@@ -35,6 +35,13 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN \
+  if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate; \
+  elif [ -f yarn.lock ]; then yarn payload migrate; \
+  elif [ -f package-lock.json ]; then npx payload migrate; \
+  else echo "No lockfile found for migration." && exit 1; \
+  fi
+
+RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
@@ -45,8 +52,8 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=3000
+ENV NODE_ENV production
+ENV PORT 3000
 
 ENV DATABASE_URI=${DATABASE_URI}
 ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
@@ -58,7 +65,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
-RUN mkdir .next && chown nextjs:nodejs .next
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
