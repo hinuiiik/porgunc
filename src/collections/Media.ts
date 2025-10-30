@@ -24,6 +24,11 @@ export const Media: CollectionConfig = {
   },
   fields: [
     {
+      name: 'alt',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'caption',
       type: 'richText',
       editor: lexicalEditor({

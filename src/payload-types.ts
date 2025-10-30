@@ -264,6 +264,7 @@ export interface Post {
  */
 export interface Media {
   id: number;
+  alt: string;
   caption?: {
     root: {
       type: string;
@@ -873,6 +874,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'polls';
+          value: number | Poll;
         } | null);
     url?: string | null;
   };
@@ -907,8 +912,8 @@ export interface Search {
   title?: string | null;
   priority?: number | null;
   doc: {
-    relationTo: 'posts';
-    value: number | Post;
+    relationTo: 'polls';
+    value: number | Poll;
   };
   slug?: string | null;
   meta?: {
@@ -1330,6 +1335,7 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
   caption?: T;
   updatedAt?: T;
   createdAt?: T;
