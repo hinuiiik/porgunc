@@ -2,8 +2,14 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_polls_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum__polls_v_version_status" AS ENUM('draft', 'published');
+    DO $$
+        BEGIN
+      IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_polls_status') THEN
+        CREATE TYPE "public"."enum_polls_status" AS ENUM('draft', 'published');
+        END IF;
+    END$$;
+
+    CREATE TYPE "public"."enum__polls_v_version_status" AS ENUM('draft', 'published');
   ALTER TYPE "public"."enum_pages_blocks_archive_relation_to" ADD VALUE 'polls' BEFORE 'posts';
   ALTER TYPE "public"."enum__pages_v_blocks_archive_relation_to" ADD VALUE 'polls' BEFORE 'posts';
   CREATE TABLE "polls_populated_authors" (
@@ -12,7 +18,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" varchar PRIMARY KEY NOT NULL,
   	"name" varchar
   );
-  
+
   CREATE TABLE "polls" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
@@ -29,7 +35,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"_status" "enum_polls_status" DEFAULT 'draft'
   );
-  
+
   CREATE TABLE "polls_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
@@ -39,7 +45,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"categories_id" integer,
   	"users_id" integer
   );
-  
+
   CREATE TABLE "_polls_v_version_populated_authors" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -47,7 +53,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_uuid" varchar,
   	"name" varchar
   );
-  
+
   CREATE TABLE "_polls_v" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"parent_id" integer,
@@ -69,7 +75,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"latest" boolean,
   	"autosave" boolean
   );
-  
+
   CREATE TABLE "_polls_v_rels" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"order" integer,
@@ -79,13 +85,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"categories_id" integer,
   	"users_id" integer
   );
-  
+
   ALTER TABLE "posts" DROP CONSTRAINT "posts_pdf_id_pdfs_id_fk";
-  
+
   ALTER TABLE "_posts_v" DROP CONSTRAINT "_posts_v_version_pdf_id_pdfs_id_fk";
-  
+
   ALTER TABLE "pdfs" DROP CONSTRAINT "pdfs_category_id_categories_id_fk";
-  
+
   DROP INDEX "posts_pdf_idx";
   DROP INDEX "_posts_v_version_version_pdf_idx";
   DROP INDEX "pdfs_category_idx";
@@ -176,11 +182,11 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_polls_v" CASCADE;
   DROP TABLE "_polls_v_rels" CASCADE;
   ALTER TABLE "pages_rels" DROP CONSTRAINT "pages_rels_polls_fk";
-  
+
   ALTER TABLE "_pages_v_rels" DROP CONSTRAINT "_pages_v_rels_polls_fk";
-  
+
   ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_polls_fk";
-  
+
   ALTER TABLE "pages_blocks_archive" ALTER COLUMN "relation_to" SET DATA TYPE text;
   ALTER TABLE "pages_blocks_archive" ALTER COLUMN "relation_to" SET DEFAULT 'posts'::text;
   DROP TYPE "public"."enum_pages_blocks_archive_relation_to";
