@@ -67,7 +67,7 @@ export default async function CategoryPage({ params: paramsPromise }: Args) {
         />
       </div>
 
-      <CollectionArchive posts={postsResult.docs} />
+      <CollectionArchive docs={postsResult.docs} relationTo="posts" />
 
       <div className="container">
         {postsResult?.page && postsResult?.totalPages > 1 && (
