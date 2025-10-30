@@ -4,6 +4,11 @@ import { fileURLToPath } from 'url'
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,19 +31,13 @@ export const Pdfs: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-    },
-    {
-      name: 'category', // will probably remove this at some point
-      type: 'relationship',
-      relationTo: 'categories',
-      required: false,
+      name: 'caption',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
     },
     {
       name: 'publishedDate',

@@ -17,8 +17,8 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
+  const polls = await payload.find({
+    collection: 'polls',
     draft: false,
     limit: 1000,
     overrideAccess: false,
@@ -28,7 +28,7 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = posts.docs.map(({ slug }) => {
+  const params = polls.docs.map(({ slug }) => {
     return { slug }
   })
 
@@ -41,32 +41,48 @@ type Args = {
   }>
 }
 
-export default async function Post({ params: paramsPromise }: Args) {
+export default async function Poll({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
-  const url = '/posts/' + slug
-  const post = await queryPostBySlug({ slug })
+  const url = '/polls/' + slug
+  const poll = await queryPostBySlug({ slug })
 
-  if (!post) return <PayloadRedirects url={url} />
+  if (!poll) return <PayloadRedirects url={url} />
+
+  const pdfUrl =
+    poll.pdf && typeof poll.pdf === 'object' && 'url' in poll.pdf
+      ? (poll.pdf.url as string)
+      : undefined
 
   return (
-    <article className="pt-16 pb-16">
+    <article className="pb-16 pt-8">
       <PageClient />
 
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <PostHero post={post} />
+      <PostHero post={poll} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
+      <div className="flex flex-col items-center gap-4">
         <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
+          <RichText className="max-w-[48rem] mx-auto" data={poll.content} enableGutter={false} />
+
+          {pdfUrl && (
+            <div className="max-w-[52rem] mx-auto mt-12 border border-border rounded-[0.8rem] overflow-hidden">
+              <iframe
+                src={pdfUrl}
+                className="w-full aspect-[8.5/11]"
+                title="PDF Viewer"
+                allowFullScreen
+              />
+            </div>
+          )}
+
+          {poll.relatedPolls && poll.relatedPolls.length > 0 && (
             <RelatedPosts
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
+              docs={poll.relatedPolls.filter((poll) => typeof poll === 'object')}
             />
           )}
         </div>
@@ -77,9 +93,9 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  const post = await queryPostBySlug({ slug })
+  const poll = await queryPostBySlug({ slug })
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: poll })
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
@@ -88,7 +104,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'posts',
+    collection: 'polls',
     draft,
     limit: 1,
     overrideAccess: draft,
