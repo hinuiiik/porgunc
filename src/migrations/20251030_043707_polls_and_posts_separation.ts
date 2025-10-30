@@ -2,14 +2,8 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-    DO $$
-        BEGIN
-      IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_polls_status') THEN
-        CREATE TYPE "public"."enum_polls_status" AS ENUM('draft', 'published');
-        END IF;
-    END$$;
-
-    CREATE TYPE "public"."enum__polls_v_version_status" AS ENUM('draft', 'published');
+   CREATE TYPE "public"."enum_polls_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__polls_v_version_status" AS ENUM('draft', 'published');
   ALTER TYPE "public"."enum_pages_blocks_archive_relation_to" ADD VALUE 'polls' BEFORE 'posts';
   ALTER TYPE "public"."enum__pages_v_blocks_archive_relation_to" ADD VALUE 'polls' BEFORE 'posts';
   CREATE TABLE "polls_populated_authors" (
