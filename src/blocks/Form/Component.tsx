@@ -10,13 +10,14 @@ import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
+import { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
 export type FormBlockType = {
   blockName?: string
   blockType?: 'formBlock'
   enableIntro: boolean
   form: FormType
-  introContent?: SerializedEditorState
+  introContent?: DefaultTypedEditorState
 }
 
 export const FormBlock: React.FC<
