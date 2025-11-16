@@ -42,13 +42,13 @@ export const PdfBlock: React.FC<Props> = async ({
 
   return (
     <div
-      className={cn(
-        '',
-        {
-          container: enableGutter,
-        },
-        className
-      )}
+      // className={cn(
+      //   '',
+      //   {
+      //     // container: enableGutter,
+      //   },
+      //   className
+      // )}
     >
       {/* Embedded PDF */}
       <div className="w-full aspect-[3/4] border border-border rounded-lg overflow-hidden">
@@ -56,7 +56,7 @@ export const PdfBlock: React.FC<Props> = async ({
           src={pdf.url ?? undefined} // <-- ensure it's string | undefined
           title={pdf.filename ?? 'PDF'}
           className="w-full h-full"
-          frameBorder="0"
+          // frameBorder="0"
         />
       </div>
 

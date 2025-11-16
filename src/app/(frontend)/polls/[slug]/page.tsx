@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload, RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
@@ -14,6 +14,7 @@ import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -41,53 +42,38 @@ type Args = {
   }>
 }
 
-export default async function Poll({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+export default async function Poll({params: paramsPromise}: Args) {
+  const {isEnabled: draft} = await draftMode()
+  const {slug = ''} = await paramsPromise
   const url = '/polls/' + slug
-  const poll = await queryPostBySlug({ slug })
+  const poll: RequiredDataFromCollectionSlug<'polls'> | null = await queryPostBySlug({slug})
 
-  if (!poll) return <PayloadRedirects url={url} />
+  if (!poll) return <PayloadRedirects url={url}/>
 
-  const pdfUrl =
-    poll.pdf && typeof poll.pdf === 'object' && 'url' in poll.pdf
-      ? (poll.pdf.url as string)
-      : undefined
+  const {layout, relatedPolls} = poll
 
   return (
-    <article className="pb-16 pt-8">
-      <PageClient />
+    <article className="pb-16">
+      <PageClient/>
 
-      <PayloadRedirects disableNotFound url={url} />
+      <PayloadRedirects disableNotFound url={url}/>
+      {draft && <LivePreviewListener/>}
 
-      {draft && <LivePreviewListener />}
+      <PostHero post={poll as Post}/>
 
-      <PostHero post={poll} />
+      <div className="w-full px-4 sm:px-6 lg:px-0 max-w-[48rem] mx-auto flex flex-col gap-6">
 
-      <div className="flex flex-col items-center gap-4">
-        <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={poll.content} enableGutter={false} />
+        <RenderBlocks blocks={layout}/>
 
-          {pdfUrl && (
-            <div className="max-w-[52rem] mx-auto mt-12 border border-border rounded-[0.8rem] overflow-hidden">
-              <iframe
-                src={pdfUrl}
-                className="w-full aspect-[8.5/11]"
-                title="PDF Viewer"
-                allowFullScreen
-              />
-            </div>
-          )}
-
-          {poll.relatedPolls && poll.relatedPolls.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={poll.relatedPolls.filter((poll) => typeof poll === 'object')}
-            />
-          )}
-        </div>
+        {relatedPolls && relatedPolls.length > 0 && (
+          <RelatedPosts
+            className="mt-12 w-full"
+            docs={relatedPolls.filter((p) => typeof p === 'object')}
+          />
+        )}
       </div>
     </article>
+
   )
 }
 

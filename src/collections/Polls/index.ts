@@ -18,6 +18,10 @@ import { PdfBlock } from '@/blocks/PdfBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePoll } from './hooks/revalidatePoll'
+import { slugField } from '@/fields/slug'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { Content } from '@/blocks/Content/config'
+import { FormBlock } from '@/blocks/Form/config'
 
 import {
   MetaDescriptionField,
@@ -26,7 +30,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { slugField } from '@/fields/slug'
 
 
 export const Polls: CollectionConfig<'polls'> = {
@@ -80,6 +83,7 @@ export const Polls: CollectionConfig<'polls'> = {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
               name: 'heroImage',
@@ -87,37 +91,26 @@ export const Polls: CollectionConfig<'polls'> = {
               relationTo: 'media',
             },
             {
-              name: 'content',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
-                },
-              }),
-              label: false,
+              name: 'layout',
+              type: 'blocks',
               required: true,
-            },
-            {
-              name: 'pdf',
-              label: 'PDF File',
-              type: 'upload',
-              relationTo: 'pdfs',
-              required: false,
               admin: {
-                description: 'Optional PDF to attach to this post.',
+                initCollapsed: true,
               },
+              blocks: [
+                Banner,
+                Code,
+                MediaBlock,
+                CallToAction,
+                Content,
+                FormBlock,
+                PdfBlock
+              ],
             },
           ],
-          label: 'Content',
         },
         {
+          label: 'Meta',
           fields: [
             {
               name: 'relatedPolls',
@@ -125,13 +118,9 @@ export const Polls: CollectionConfig<'polls'> = {
               admin: {
                 position: 'sidebar',
               },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
+              filterOptions: ({id}) => ({
+                id: {not_in: [id]},
+              }),
               hasMany: true,
               relationTo: 'polls',
             },
@@ -145,7 +134,6 @@ export const Polls: CollectionConfig<'polls'> = {
               relationTo: 'categories',
             },
           ],
-          label: 'Meta',
         },
         {
           name: 'meta',
@@ -162,13 +150,9 @@ export const Polls: CollectionConfig<'polls'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -180,14 +164,12 @@ export const Polls: CollectionConfig<'polls'> = {
       name: 'publishedAt',
       type: 'date',
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        date: {pickerAppearance: 'dayAndTime'},
         position: 'sidebar',
       },
       hooks: {
         beforeChange: [
-          ({ siblingData, value }) => {
+          ({siblingData, value}) => {
             if (siblingData._status === 'published' && !value) {
               return new Date()
             }
@@ -205,9 +187,6 @@ export const Polls: CollectionConfig<'polls'> = {
       hasMany: true,
       relationTo: 'users',
     },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
     {
       name: 'populatedAuthors',
       type: 'array',
@@ -219,13 +198,20 @@ export const Polls: CollectionConfig<'polls'> = {
         readOnly: true,
       },
       fields: [
+        {name: 'id', type: 'text'},
+        {name: 'name', type: 'text'},
         {
-          name: 'id',
+          name: 'jobTitle',
           type: 'text',
+          required: false,
+          admin: {
+            description: 'Job Title',
+          },
         },
         {
-          name: 'name',
-          type: 'text',
+          name: "authorPage",
+          type: "number",
+          required: false,
         },
       ],
     },

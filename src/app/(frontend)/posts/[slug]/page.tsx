@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload, RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
@@ -14,6 +14,7 @@ import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -41,37 +42,38 @@ type Args = {
   }>
 }
 
-export default async function Post({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+export default async function Post({params: paramsPromise}: Args) {
+  const {isEnabled: draft} = await draftMode()
+  const {slug = ''} = await paramsPromise
   const url = '/posts/' + slug
-  const post = await queryPostBySlug({ slug })
+  const post: RequiredDataFromCollectionSlug<'posts'> | null = await queryPostBySlug({slug})
 
-  if (!post) return <PayloadRedirects url={url} />
+  if (!post) return <PayloadRedirects url={url}/>
+
+  const {layout, relatedPosts} = post
 
   return (
-    <article className="pt-16 pb-16">
-      <PageClient />
+    <article className="pb-16">
+      <PageClient/>
 
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
+      <PayloadRedirects disableNotFound url={url}/>
+      {draft && <LivePreviewListener/>}
 
-      {draft && <LivePreviewListener />}
+      <PostHero post={post as Post}/>
 
-      <PostHero post={post} />
+      <div className="w-full px-4 sm:px-6 lg:px-0 max-w-[48rem] mx-auto flex flex-col gap-6">
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
-        </div>
+        <RenderBlocks blocks={layout}/>
+
+        {relatedPosts && relatedPosts.length > 0 && (
+          <RelatedPosts
+            className="mt-12 w-full"
+            docs={relatedPosts.filter((p) => typeof p === 'object')}
+          />
+        )}
       </div>
     </article>
+
   )
 }
 

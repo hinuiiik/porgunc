@@ -26,6 +26,10 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import {slugField} from '@/fields/slug'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { Content } from '@/blocks/Content/config'
+import { FormBlock } from '@/blocks/Form/config'
+import { PdfBlock } from '@/blocks/PdfBlock/config'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -78,6 +82,7 @@ export const Posts: CollectionConfig<'posts'> = {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
               name: 'heroImage',
@@ -85,27 +90,26 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'media',
             },
             {
-              name: 'content',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({rootFeatures}) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4']}),
-                    BlocksFeature({blocks: [Banner, Code, MediaBlock]}),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
-                },
-              }),
-              label: false,
+              name: 'layout',
+              type: 'blocks',
               required: true,
+              admin: {
+                initCollapsed: true,
+              },
+              blocks: [
+                Banner,
+                Code,
+                MediaBlock,
+                CallToAction,
+                Content,
+                FormBlock,
+                PdfBlock
+              ],
             },
           ],
-          label: 'Content',
         },
         {
+          label: 'Meta',
           fields: [
             {
               name: 'relatedPosts',
@@ -113,13 +117,9 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 position: 'sidebar',
               },
-              filterOptions: ({id}) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
+              filterOptions: ({id}) => ({
+                id: {not_in: [id]},
+              }),
               hasMany: true,
               relationTo: 'posts',
             },
@@ -133,7 +133,6 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'categories',
             },
           ],
-          label: 'Meta',
         },
         {
           name: 'meta',
@@ -150,13 +149,9 @@ export const Posts: CollectionConfig<'posts'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -168,9 +163,7 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'publishedAt',
       type: 'date',
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        date: {pickerAppearance: 'dayAndTime'},
         position: 'sidebar',
       },
       hooks: {
@@ -193,9 +186,6 @@ export const Posts: CollectionConfig<'posts'> = {
       hasMany: true,
       relationTo: 'users',
     },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
     {
       name: 'populatedAuthors',
       type: 'array',
@@ -207,13 +197,20 @@ export const Posts: CollectionConfig<'posts'> = {
         readOnly: true,
       },
       fields: [
+        {name: 'id', type: 'text'},
+        {name: 'name', type: 'text'},
         {
-          name: 'id',
+          name: 'jobTitle',
           type: 'text',
+          required: false,
+          admin: {
+            description: 'Job Title',
+          },
         },
         {
-          name: 'name',
-          type: 'text',
+          name: "authorPage",
+          type: "number",
+          required: false,
         },
       ],
     },

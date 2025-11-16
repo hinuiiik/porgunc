@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import type { Page } from '@/payload-types'
+import type { Page, Poll, Post } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
@@ -18,18 +18,19 @@ const blockComponents = {
   pdfBlock: PdfBlock,
 }
 
-export const RenderBlocks: React.FC<{
-  blocks: Page['layout'][0][]
-}> = (props) => {
-  const { blocks } = props
+type BlockType = Page['layout'][0] | Post['layout'][0] | Poll['layout'][0]
 
-  const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
+
+export const RenderBlocks = <T extends BlockType>({blocks}: { blocks: T[] }) => {
+  const hasBlocks = Array.isArray(blocks) && blocks.length > 0
+
+  if (!hasBlocks) return null
 
   if (hasBlocks) {
     return (
       <Fragment>
         {blocks.map((block, index) => {
-          const { blockType } = block
+          const { blockType } = block as { blockType?: keyof typeof blockComponents }
 
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
